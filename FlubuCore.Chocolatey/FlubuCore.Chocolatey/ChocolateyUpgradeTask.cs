@@ -8,11 +8,11 @@ using NuGet.Packaging;
 
 namespace FlubuCore.Chocolatey
 {
-    public class ChocolateyUpdateTask : ChocolateyBaseTask<ChocolateyUpdateTask>
+    public class ChocolateyUninstallTask : ChocolateyBaseTask<ChocolateyUninstallTask>
     {
         private string[] packages;
 
-        public ChocolateyUpdateTask(params string[] package)
+        public ChocolateyUninstallTask(params string[] package)
         {
             ExecutablePath = "choco";
             WithArguments("upgrade");
@@ -35,7 +35,7 @@ namespace FlubuCore.Chocolatey
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public ChocolateyUpdateTask Source(string source)
+        public ChocolateyUninstallTask Source(string source)
         {
             WithArguments($"--source={source}");
             return this;
@@ -46,50 +46,30 @@ namespace FlubuCore.Chocolatey
         /// </summary>
         /// <param name="version"></param>
         /// <returns></returns>
-        public ChocolateyUpdateTask Version(string version)
+        public ChocolateyUninstallTask Version(string version)
         {
             WithArguments($"--version={version}");
             return this;
         }
 
         /// <summary>
-        /// Prerelease - Include Prereleases? Defaults to false.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask IncludePrerelease()
-        {
-            WithArguments("--prerelease");
-            return this;
-        }
-
-        /// <summary>
-        /// ForceX86 - Force x86 (32bit) installation on 64 bit systems. Defaults to false.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask ForceX86()
-        {
-            WithArguments("--forceX86");
-            return this;
-        }
-
-        /// <summary>
         ///  InstallArguments - Install Arguments to pass to the native installer in the package. Defaults to unspecified.
         /// </summary>
-        /// <param name="parameter"></param>
+        /// <param name="argument"></param>
         /// <returns></returns>
-        public ChocolateyUpdateTask InstallArguments(string parameter)
+        public ChocolateyUninstallTask UninstallArguments(string argument)
         {
-            WithArguments($"--package-parameters={parameter}");
+            WithArguments($"--uninstall-argumentss={argument}");
             return this;
         }
 
-        public ChocolateyUpdateTask OverrideArguments()
+        public ChocolateyUninstallTask OverrideArguments()
         {
             WithArguments("--override-arguments");
             return this;
         }
 
-        public ChocolateyUpdateTask PackageParameters(string parameters)
+        public ChocolateyUninstallTask PackageParameters(string parameters)
         {
             WithArguments($"--package-parameters={parameters}");
             return this;
@@ -99,7 +79,7 @@ namespace FlubuCore.Chocolatey
         /// Apply Install Arguments To Dependencies  - Should install arguments be applied to dependent packages? Defaults to false.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask ApplyInstallArgumentsToDependencies()
+        public ChocolateyUninstallTask ApplyInstallArgumentsToDependencies()
         {
             WithArguments("--apply-args-to-dependencies");
             return this;
@@ -109,369 +89,144 @@ namespace FlubuCore.Chocolatey
         ///  Apply Package Parameters To Dependencies  - Should package parameters be applied to dependent packages? Defaults to false.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask ApplyPackageParametersToDependencies()
+        public ChocolateyUninstallTask ApplyPackageParametersToDependencies()
         {
             WithArguments("--apply-package-parameters-to-dependencies");
             return this;
         }
 
         /// <summary>
-        /// AllowDowngrade - Should an attempt at downgrading be allowed? Defaults to false.
+        ///  AllowMultipleVersions - Should multiple versions of a package be installed? Defaults to false.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask AllowDowngrade()
+        public ChocolateyUninstallTask AllowMultipleVersions()
         {
-            WithArguments("--allow-downgrade");
+            WithArguments("--allow-multiple-versions");
             return this;
         }
 
         /// <summary>
-        /// ForceDependencies - Force dependencies to be reinstalled when force installing package(s). Must be used in conjunction with --force.
+        /// RemoveDependencies - Uninstall dependencies when uninstalling package(s). Defaults to false.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask ForceDependencies()
+        public ChocolateyUninstallTask RemoveDependencies()
         {
-            WithArguments("--force-dependencies");
+            WithArguments("--remove-dependencies");
             return this;
         }
 
         /// <summary>
-        ///  IgnoreDependencies - Ignore dependencies when installing package(s).
+        /// Skip Powershell - Do not run chocolateyUninstall.ps1. Defaults to false.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask IgnoreDependencies()
+        public ChocolateyUninstallTask SkipAutomationScripts()
         {
-            WithArguments("--ignore-dependencies");
+            WithArguments("--skip-automation-scripts");
             return this;
         }
 
         /// <summary>
-        /// Skip Powershell - Do not run chocolateyInstall.ps1. Defaults to false.
+        ///  IgnorePackageExitCodes - Exit with a 0 for success and 1 for non-succes-s, no matter what package scripts provide for exit codes. Overrides the
+        ///  default feature 'usePackageExitCodes' set to 'True'. Available in 0.9.10+.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask SkipAutomationScripts()
-        {
-            WithArguments(" --skip-automation-scripts");
-            return this;
-        }
-
-        /// <summary>
-        ///  User - used with authenticated feeds. Defaults to empty.
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask User(string user)
-        {
-            WithArguments($"--user={user}");
-            return this;
-        }
-
-        /// <summary>
-        ///  Password - the user's password to the source. Defaults to empty.
-        /// </summary>
-        /// <param name="paswword"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask Password(string paswword)
-        {
-            WithArguments($"--password={paswword}", true);
-            return this;
-        }
-
-        /// <summary>
-        /// Client certificate - PFX pathname for an x509 authenticated feeds. Defaults to empty. Available in 0.9.10+.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask Cert(string path)
-        {
-            WithArguments($"--cert={path}");
-            return this;
-        }
-
-        /// <summary>
-        ///   Certificate Password - the client certificate's password to the source. Defaults to empty. Available in 0.9.10+.
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask CertPassword(string password)
-        {
-            WithArguments($"--certpassword={password}", true);
-            return this;
-        }
-
-        /// <summary>
-        ///  IgnoreChecksums - Ignore checksums provided by the package. Overrides the default feature 'checksumFiles' set to 'True'. Available in 0.9.9.9+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask IgnoreChecksums()
-        {
-            WithArguments($"--ignore-checksums");
-            return this;
-        }
-
-        /// <summary>
-        ///  Except - a comma-separated list of package names that should not be upgraded when upgrading 'all'. Defaults to empty. Available in 0.9.10+.
-        /// </summary>
-        /// <param name="packages"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask Except(string packages)
-        {
-            WithArguments($"--except={packages}");
-            return this;
-        }
-
-        /// <summary>
-        ///  Skip Packages Not Installed - if a package is not installed, do not install it during the upgrade process. Overrides the default feature
-        /// 'skipPackageUpgradesWhenNotInstalled' set to 'False'. Available in 0.1-0.12+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask SkipIfNotInstalled()
-        {
-            WithArguments("--skip-if-not-installed");
-            return this;
-        }
-
-        public ChocolateyUpdateTask InstallIfNotInstalled()
-        {
-            WithArguments("--install-if-not-installed");
-            return this;
-        }
-
-        /// <summary>
-        ///   Allow Empty Checksums - Allow packages to have empty/missing checksums for downloaded resources from non-secure locations (HTTP, FTP). Use this
-        ///   switch is not recommended if using sources that download resources from the internet. Overrides the default feature 'allowEmptyChecksums' set to  'False'. Available in 0.10.0+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask AllowEmptyChecksums()
-        {
-            WithArguments("--allow-empty-checksums");
-            return this;
-        }
-
-        /// <summary>
-        /// Allow Empty Checksums Secure - Allow packages to have empty checksums for downloaded resources from secure locations (HTTPS). Overrides the
-        /// default feature 'allowEmptyChecksumsSecure' set to 'True'. Available in 0.10.0+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask AllowEmptyChecksumsSecure()
-        {
-            WithArguments("--allow-empty-checksums-secure");
-            return this;
-        }
-
-        /// <summary>
-        /// Require Checksums - Requires packages to have checksums for downloaded resources (both non-secure and secure). Overrides the default feature
-        /// 'allowEmptyChecksums' set to 'False' and 'allowEmptyChecksumsSecure' set to 'True'. Available in 0.10.0+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask RequireCheckSums()
-        {
-            WithArguments("--require-checksums");
-            return this;
-        }
-
-        /// <summary>
-        /// Download Checksum - a user provided checksum for downloaded resources for the package. Overrides the package checksum (if it has one).
-        /// Defaults to empty. Available in 0.10.0+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask DownloadChecksum(string checksum)
-        {
-            WithArguments($"--download-checksum={checksum}");
-            return this;
-        }
-
-        /// <summary>
-        /// Download Checksum 64bit - a user provided checksum for 64bit downloaded resources for the package. Overrides the package 64-bit checksum (if it has one).
-        /// Defaults to same as Download Checksum. Available in 0.10.0+.
-        /// </summary>
-        /// <param name="checksum"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask DownloadChecksumX64(string checksum)
-        {
-            WithArguments($"--download-checksum-x64={checksum}");
-            return this;
-        }
-
-        /// <summary>
-        /// Download Checksum Type 64bit - a user provided checksum for 64bit downloaded resources for the package. Overrides the package 64-bit
-        /// checksum (if it has one). Used in conjunction with Download Checksum  64bit. Available values are 'md5', 'sha1', 'sha256' or 'sha512'.
-        /// Defaults to same as Download Checksum Type. Available in 0.10.0+.
-        /// </summary>
-        /// <param name="checksumType"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask DownloadChecksumType(string checksumType)
-        {
-            WithArguments($"--download-checksum-type={checksumType}");
-            return this;
-        }
-
-        /// <summary>
-        /// IgnorePackageExitCodes - Exit with a 0 for success and 1 for non-succes-s, no matter what package scripts provide for exit codes. Overrides the
-        /// default feature 'usePackageExitCodes' set to 'True'. Available in 0.-9.10+.
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask IgnorePackageExitCodes()
+        public ChocolateyUninstallTask IgnorePackageExitCodes()
         {
             WithArguments("--ignore-package-exit-codes");
             return this;
         }
 
         /// <summary>
-        /// UsePackageExitCodes - Package scripts can provide exit codes. Use those  for choco's exit code when non-zero (this value can come from a
-        ///    dependency package). Chocolatey defines valid exit codes as 0, 1605, 1614, 1641, 3010.  Overrides the default feature 'usePackageExitCodes' set to 'True'. Available in 0.9.10+.
+        /// UsePackageExitCodes - Package scripts can provide exit codes. Use those for choco's exit code when non-zero (this value can come from a dependency package). Chocolatey defines valid exit codes as 0, 1605,
+        /// 1614, 1641, 3010. Overrides the default feature 'usePackageExitCodes' set to 'True'. Available in 0.9.10+.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask UsePackageExitCodes()
+        public ChocolateyUninstallTask UsePackageExitCodes()
         {
             WithArguments("--use-package-exit-codes");
             return this;
         }
 
-        public ChocolateyUpdateTask StopOnFirstPackageFailiure()
+        /// <summary>
+        /// UseAutoUninstaller - Use auto uninstaller service when uninstalling. Overrides the default feature 'autoUninstaller' set to 'True'. Available in 0.9.10+.
+        /// </summary>
+        /// <returns></returns>
+        public ChocolateyUninstallTask UseAutoUninstaller()
+        {
+            WithArguments("--use-autouninstaller");
+            return this;
+        }
+
+        /// <summary>
+        ///  SkipAutoUninstaller - Skip auto uninstaller service when uninstalling. Overrides the default feature 'autoUninstaller' set to 'True'. Available in 0.9.10+.
+        /// </summary>
+        /// <returns></returns>
+        public ChocolateyUninstallTask SkipAutoInstaller()
+        {
+            WithArguments("--skip-autouninstaller");
+            return this;
+        }
+
+        /// <summary>
+        /// FailOnAutoUninstaller - Fail the package uninstall if the auto uninstaller reports and error. Overrides the default feature 'failOnAutoUninstaller' set to 'False'. Available in 0.9.10+.
+        /// </summary>
+        /// <returns></returns>
+        public ChocolateyUninstallTask FailOnAutoUninstaller()
+        {
+            WithArguments("--fail-on-autouninstaller");
+            return this;
+        }
+
+        /// <summary>
+        ///  --ignoreautouninstallerfailure, --ignore-autouninstaller-failure Ignore Auto Uninstaller Failure - Do not fail the package if auto uninstaller reports an error. Overrides the default feature 'failOnAutoUninstaller' set to 'False'. Available in 0.9.10+.
+        /// </summary>
+        /// <returns></returns>
+        public ChocolateyUninstallTask IgnoreAutoUninstallerFailure()
+        {
+            WithArguments("--ignore-autouninstaller-failure");
+            return this;
+        }
+
+        /// <summary>
+        ///  Stop On First Package Failure - stop running install, upgrade or uninstall on first package failure instead of continuing with others.
+        ///  Overrides the default feature 'stopOnFirstPackageFailure' set to 'False'. Available in 0.10.4+.
+        /// </summary>
+        /// <returns></returns>
+        public ChocolateyUninstallTask StopOnFirstPackageFailure()
         {
             WithArguments("--stop-on-first-package-failure");
             return this;
         }
 
         /// <summary>
-        ///  Exit When Reboot Detected - Stop running install, upgrade, or uninstall when a reboot request is detected. Requires 'usePackageExitCodes'
-        ///  feature to be turned on. Will exit with either 350 or 1604.  Overrides  the default feature 'exitOnRebootDetected' set to 'False'.  Available in  0.10.12+.
+        /// Exit When Reboot Detected - Stop running install, upgrade, or uninstall when a reboot request is detected. Requires 'usePackageExitCodes'
+        /// feature to be turned on. Will exit with either 350 or 1604.  Overrides the default feature 'exitOnRebootDetected' set to 'False'.  Available in 0.10.12+.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask ExitWhenRebotDetected()
+        public ChocolateyUninstallTask ExitWhenRebootDetected()
         {
             WithArguments("--exit-when-reboot-detected");
             return this;
         }
 
         /// <summary>
-        /// Ignore Detected Reboot - Ignore any detected reboots if found. Overrides  the default feature 'exitOnRebootDetected' set to 'False'.  Available in 0.10.12+.
+        ///  Ignore Detected Reboot - Ignore any detected reboots if found. Overrides the default feature 'exitOnRebootDetected' set to 'False'.  Available in 0.10.12+.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask IgnoreDetectedReboot()
+        public ChocolateyUninstallTask IgnoreDetectedReboot()
         {
             WithArguments("--ignore-detected-reboot");
             return this;
         }
 
         /// <summary>
-        ///  Skip Download Cache - Use the original download even if a private CDN cache is available for a package. Overrides the default feature
-        /// 'downloadCache' set to 'True'. Available in 0.9.10+. [Licensed editions](https://chocolatey.org/compare) only. See https://chocolatey.org/docs/features-private-cdn
+        ///  From Programs and Features - Uninstalls a program from programs and features. Name used for id must be a match or a wildcard (*) to Display
+        /// Name in Programs and Features. Available in [licensed editions](https://chocolatey.org/compare) only (licensed version 1.8.0+) and requires v0.10.4+.
         /// </summary>
         /// <returns></returns>
-        public ChocolateyUpdateTask SkipDownloadCache()
+        public ChocolateyUninstallTask FromProgramsAndFeatures()
         {
-            WithArguments("--skip-download-cache");
-            return this;
-        }
-
-        public ChocolateyUpdateTask UseDownloadCache()
-        {
-            WithArguments("--use-download-cache");
-            return this;
-        }
-
-        /// <summary>
-        /// kip Virus Check - Skip the virus check for downloaded files on this run. Overrides the default feature 'virusCheck' set to 'True'. Available
-        /// in 0.9.10+. [Licensed editions](https://chocolatey.org/compare) only. See https://chocolate-y.org/docs/features-virus-check
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask SkipVirusCheck()
-        {
-            WithArguments("--skip-virus-check");
-            return this;
-        }
-
-        /// <summary>
-        ///  Virus Check - check downloaded files for viruses. Overrides the default feature 'virusCheck' set to 'True'. Available in 0.9.10+. Licensed
-        ///    editions only. See https://chocolatey.org/docs/features-virus-check
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask VirusCheck()
-        {
-            WithArguments("--virus-check");
-            return this;
-        }
-
-        /// <summary>
-        ///  Virus Check Minimum Scan Result Positives - the minimum number of scan result positives required to flag a package. Used when virusScannerType
-        ///  is VirusTotal. Overrides the default configuration value 'virusCheckMinimumPositives' set to '5'. Available in 0.9.10+. Licensed editions only. See https://chocolatey.org/docs/features-virus-check
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask VirusPositiveMin()
-        {
-            WithArguments("--viruspositivesmin");
-            return this;
-        }
-
-        /// <summary>
-        /// InstallArgumentsSensitive - Install Arguments to pass to the native installer in the package that are sensitive and you do not want logged.
-        ///  Defaults to unspecified. Available in 0.10.1+. [Licensed editions](https://chocolatey.org/compare) only.
-        /// </summary>
-        /// <param name="argument"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask InstallArgumentsSensitive(string argument)
-        {
-            WithArguments($"--install-arguments-sensitive={argument}", true);
-            return this;
-        }
-
-        /// <summary>
-        /// PackageParametersSensitive - Package Parameters to pass the package that
-        /// are sensitive and you do not want logged. Defaults to unspecified.
-        /// Available in 0.10.1+. [Licensed editions](https://chocolatey.org/compare) only.
-        /// </summary>
-        /// <param name="parameter"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask PackageParametersSensitive(string parameter)
-        {
-            WithArguments($"--package-parameters-sensitive={parameter}", true);
-            return this;
-        }
-
-        /// <summary>
-        /// Maximum Download Rate Bits Per Second - The maximum download rate in  bits per second. '0' or empty means no maximum. A number means that will
-        /// be the maximum download rate in bps. Defaults to config setting of '0'.  Available in [licensed editions](https://chocolatey.org/compare) v1.10+ only. See https://chocolate- y.org/docs/features-package-throttle
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public ChocolateyUpdateTask MaxDownloadRate(int value)
-        {
-            WithArguments($"--max-download-rate={value}");
-            return this;
-        }
-
-        /// <summary>
-        /// Reducer Installed Package Size (Package Reducer) - Reduce size of the nupkg file to very small and remove extracted archives and installers.
-        /// Overrides the default feature 'reduceInstalledPackageSpaceUsage' set to 'True'. [Licensed editions](https://chocolatey.org/compare) only (version 1.12.0+). See https://chocolate-y.org/docs/features-package-reducer
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask ReducePackageSize()
-        {
-            WithArguments("--reduce-package-siz");
-            return this;
-        }
-
-        /// <summary>
-        /// Do Not Reduce Installed Package Size - Leave the nupkg and files alone in the package. Overrides the default feature
-        /// 'reduceInstalledPackageSpaceUsage' set to 'True'. [Licensed editions](https://chocolatey.org/compare) only (version 1.12.0+). See https://chocolatey.org/docs/features-package-reducer
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask NoReducePackageSize()
-        {
-            WithArguments("--no-reduce-package-size");
-            return this;
-        }
-
-        /// <summary>
-        /// Reduce Only Nupkg File Size - reduce only the size of nupkg file when using Package Reducer. Overrides the default feature
-        /// 'reduceOnlyNupkgSize' set to 'False'. [Licensed editions](https://chocolatey.org/compare) only (version -1.12.0+). See https://chocolatey.org/docs/features-package-reducer
-        /// </summary>
-        /// <returns></returns>
-        public ChocolateyUpdateTask ReduceNupkgOnly()
-        {
-            WithArguments("--reduce-nupkg-only");
+            WithArguments("--from-programs-and-features");
             return this;
         }
 
