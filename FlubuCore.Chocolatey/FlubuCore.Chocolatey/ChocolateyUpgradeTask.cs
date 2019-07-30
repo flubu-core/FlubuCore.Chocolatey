@@ -15,7 +15,7 @@ namespace FlubuCore.Chocolatey
         public ChocolateyUpdateTask(params string[] package)
         {
             ExecutablePath = "choco";
-            WithArguments("update");
+            WithArguments("upgrade");
             packages = package;
         }
 
