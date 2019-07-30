@@ -1,3 +1,7 @@
 FlubuCore.Chocolatey/.vs/
 FlubuCore.Chocolatey/FlubuCore.Chocolatey/bin/
 FlubuCore.Chocolatey/FlubuCore.Chocolatey/obj/
+FlubuCore.Chocolatey/Build/obj/
+FlubuCore.Chocolatey/bin/
+FlubuCore.Chocolatey/Build/bin/
+FlubuCore.Chocolatey/output/
