@@ -15,7 +15,7 @@ namespace FlubuCore.Chocolatey
         public ChocolateyUninstallTask(params string[] package)
         {
             ExecutablePath = "choco";
-            WithArguments("upgrade");
+            WithArguments("uninstall");
             packages = package;
         }
 
