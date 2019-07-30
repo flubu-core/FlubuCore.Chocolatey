@@ -6,7 +6,7 @@
 
 FlubuCore.Chocolatey is a [FlubuCore](https://github.com/flubu-core/flubu.core) plugin adds chocolatey specific tasks. 
 
-Chocolatey is a software management solution unlike anything else you've ever experienced on Windows. It focuses on simplicity, security, and scalability. You write a software deployment in PowerShell once for any software (not just installers), then you can deploy it everywhere you have Windows with any solution that can manage systems (configuration management, endpoint management, etc) and track and manage updates of that software over time. Manage software on-premise, in the "Cloud", or in Docker containers with Chocolatey.
+Chocolatey is a software management solution unlike anything else you've ever experienced on Windows. It focuses on simplicity, security, and scalability. You write a software deployment in PowerShell once for any software (not just installers), then you can deploy it everywhere you have Windows with any solution that can manage systems (configuration management, endpoint management, etc) and track and manage updates of that software over time. Manage software on-premise, in the "Cloud", or in Docker containers with Chocolatey.
 
 Plugin adds chocolatey tasks to FlubuCore ``` ITaskContext ``` interface:  ``` context.Tasks().Chocolatey(). ```
 
